@@ -35,7 +35,8 @@ class TestConstrainedMin(unittest.TestCase):
                            ineq_constraints=ineqs, save=True, filename="lp_central_path.png")
         
         # Plot objective values
-        plot_objective_values(obj_vals, title="Objective vs Iteration (LP)", save=True,filename="lp_obj_vals.png")
+        negative_obj_vals = [-obj for obj in obj_vals]
+        plot_objective_values(negative_obj_vals, title="Objective vs Iteration (LP)", save=True,filename="lp_obj_vals.png")
 
         print("LP solution:", sol)
         print("Objective:", obj_vals[-1])
