@@ -2,7 +2,7 @@ import numpy as np
 
 
 def interior_pt(func, ineq_constraints, eq_constraints_mat,
-                 eq_constraints_rhs, x0, t0=1.0, mu=10.0, tol=1e-6, max_iter=20):
+                 eq_constraints_rhs, x0, t0=1.0, mu=10.0, tol=1e-12, max_iter=100):
     x = x0.copy()
     t = t0
     m = len(ineq_constraints)
@@ -10,9 +10,9 @@ def interior_pt(func, ineq_constraints, eq_constraints_mat,
     obj_vals = [func(x)[0]]
 
     for _ in range(max_iter):
-        for _ in range(50):  # Newton iterations
+        for _ in range(100):  # Newton iterations
             delta_x = newton_step(func, ineq_constraints, eq_constraints_mat, eq_constraints_rhs, x, t)
-            if np.linalg.norm(delta_x) < 1e-8:
+            if np.linalg.norm(delta_x) < 1e-12:
                 break
             step_size = backtracking(x, delta_x, func, ineq_constraints, t)
             x += step_size * delta_x
@@ -68,7 +68,7 @@ def newton_step(func, ineq_constraints, eq_constraints_mat, eq_constraints_rhs, 
     return delta_x
 
 
-def backtracking(x, dx, func, ineq_constraints, t, alpha=0.01, beta=0.5):
+def backtracking(x, dx, func, ineq_constraints, t, alpha=0.1, beta=0.5):
     s = 1.0
     while True:
         x_new = x + s * dx

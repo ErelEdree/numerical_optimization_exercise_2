@@ -12,14 +12,16 @@ class TestConstrainedMin(unittest.TestCase):
         func, ineqs, A, b, x0 = get_qp_example()
         sol, path, obj_vals = interior_pt(func, ineqs, A, b, x0)
 
-        # Plot 3D central path
-        plot_3d_central_path(path, title="QP Central Path", xlabel="x", ylabel="y", zlabel="z", save=True, show=False,filename="qp_central_path.png")
+        # Plot 3D central path with feasible region
+        plot_3d_central_path(path, title="QP Central Path", xlabel="x", ylabel="y", zlabel="z", 
+                           ineq_constraints=ineqs, eq_constraints_mat=A, eq_constraints_rhs=b,
+                           save=True, filename="qp_central_path.png")
         
         # Plot objective values
         plot_objective_values(obj_vals, title="Objective vs Iteration (QP)", save=True,filename="qp_obj_vals.png" )
 
         print("QP solution:", sol)
-        print("Objective:", func(sol)[0])
+        print("Objective:", obj_vals[-1])
         print("Equality constraint (Ax = b):", A @ sol - b)
         for i, c in enumerate(ineqs):
             print(f"Ineq {i}:", c(sol)[0])
@@ -28,14 +30,15 @@ class TestConstrainedMin(unittest.TestCase):
         func, ineqs, A, b, x0 = get_lp_example()
         sol, path, obj_vals = interior_pt(func, ineqs, A, b, x0)
 
-        # Plot 2D central path
-        plot_2d_central_path(path, title="LP Central Path", xlabel="x", ylabel="y", save=True,filename="lp_central_path.png")
+        # Plot 2D central path with feasible region
+        plot_2d_central_path(path, title="LP Central Path", xlabel="x", ylabel="y", 
+                           ineq_constraints=ineqs, save=True, filename="lp_central_path.png")
         
         # Plot objective values
         plot_objective_values(obj_vals, title="Objective vs Iteration (LP)", save=True,filename="lp_obj_vals.png")
 
         print("LP solution:", sol)
-        print("Objective:", func(sol)[0])
+        print("Objective:", obj_vals[-1])
         for i, c in enumerate(ineqs):
             print(f"Ineq {i}:", c(sol)[0])
 
